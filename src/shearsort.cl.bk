@@ -1,0 +1,95 @@
+__kernel void shearsort_rows(__global int *A, int cols) {
+	__local int temp;
+	
+	int y = get_global_id(1);
+
+	/*for(int i=0; i<cols; i++) {
+		if(y%2 == 0) {
+			if(A[y * cols + i] > A[y * cols + i + 1]) {
+				temp = A[y * cols + i];
+				A[y * cols + i] = A[y * cols + i + 1];
+				A[y * cols + i + 1] = temp;
+			}
+		} else {
+			if(A[y * cols + i] < A[y * cols + i + 1]) {
+				temp = A[y * cols + i];
+				A[y * cols + i] = A[y * cols + i + 1];
+				A[y * cols + i + 1] = temp;
+			}
+		}
+	}*/
+}
+
+__kernel void shearsort_cols(__global int *A, int cols) {
+	__local int temp;
+	
+	int x = get_global_id(0);
+	
+	/*for(int i=0; i<cols; i++) {
+		if(A[i * cols + x] > A[(i + 1) * cols + x]) {
+			temp = A[i * cols + x];
+			A[i * cols + x] = A[(i + 1) * cols + x];
+			A[(i + 1) * cols + x] = temp;
+		}
+	}*/
+}
+
+__kernel void odd(__global int *A, int cols) {
+
+	int x = get_global_id(0);
+	int y = get_global_id(1);
+	int temp;
+		
+	if(A[y * cols + x * 2 + 1] > A[y * cols + x * 2 + 2]) {
+		temp = A[y * cols + x * 2 + 1];
+		A[y * cols + x * 2 + 1] = A[y * cols + x * 2 + 2];
+		A[y * cols + x * 2 + 2] = temp;
+	}
+}
+
+__kernel void even(__global int *A, int cols) {
+
+	int x = get_global_id(0);
+	int y = get_global_id(1);
+	int temp;
+		
+	
+	if(A[y * cols + x * 2] > A[y * cols + x * 2 + 1]) {
+		temp = A[y * cols + x * 2 ];
+		A[y * cols + x * 2] = A[y * cols + x * 2 + 1];
+		A[y * cols + x * 2 + 1] = temp;
+	}
+}
+
+__kernel void odd_even_row(__global int *A, int cols, int offset) {
+	int x = get_global_id(0);
+	int y = get_global_id(1);
+	int temp;
+		
+	if(y%2 == 0) {
+		if(A[y * cols + x * 2 + offset] > A[y * cols + x * 2 + 1 + offset]) {
+			temp = A[y * cols + x * 2 + offset];
+			A[y * cols + x * 2 + offset] = A[y * cols + x * 2 + 1 + offset];
+			A[y * cols + x * 2 + 1 + offset] = temp;
+		}
+	} else {
+		if(A[y * cols + x * 2 + offset] < A[y * cols + x * 2 + 1 + offset]) {
+			temp = A[y * cols + x * 2 + offset];
+			A[y * cols + x * 2 + offset] = A[y * cols + x * 2 + 1 + offset];
+			A[y * cols + x * 2 + 1 + offset] = temp;
+		}
+	}
+}
+
+__kernel void odd_even_col(__global int *A, int cols, int offset) {
+	int x = get_global_id(0);
+	int y = get_global_id(1);
+	int temp;
+		
+	if(A[(y * 2 + offset) * cols + x] > A[(y * 2 + offset + 1) * cols + x]) {
+		temp = A[(y * 2 + offset) * cols + x];
+		A[(y * 2 + offset) * cols + x] = A[(y * 2 + offset + 1) * cols + x];
+		A[(y * 2 + offset + 1) * cols + x] = temp;
+	}	
+}
+
